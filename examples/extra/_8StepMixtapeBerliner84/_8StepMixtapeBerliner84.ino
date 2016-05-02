@@ -1,8 +1,8 @@
-#include <TeenyRiotSynthEngine.h>
+#include <TeenySynth.h>
 #include <util/delay.h>
 #include <Arduino.h>
 
-synth edgar;    //-Make a synth
+TeenySynth synth;    //-Make a synth
 
 
 int melody[] = {
@@ -19,24 +19,24 @@ unsigned long lastTime = 0;            // variable to store the last time we sen
 
 void setup()
 {
-    edgar.begin();
-    edgar.setupVoice(0,NOISE,60,ENVELOPE1,80,64);
-    edgar.setupVoice(1,SQUARE,62,ENVELOPE0,100,64);
-    edgar.setupVoice(2,NOISE,64,ENVELOPE2,110,64);
-    edgar.setupVoice(3,SQUARE,67,ENVELOPE0,110,64);
+    synth.begin();
+    synth.setupVoice(0,NOISE,60,ENVELOPE1,80,64);
+    synth.setupVoice(1,SQUARE,62,ENVELOPE0,100,64);
+    synth.setupVoice(2,NOISE,64,ENVELOPE2,110,64);
+    synth.setupVoice(3,SQUARE,67,ENVELOPE0,110,64);
 }
 
 
 void loop()
 {
 
-    unsigned long m = edgar.millis();
+    unsigned long m = synth.millis();
 
     if (m-lastTime >= analogRead(A3))  {
-           lastTime = edgar.millis(); // cant use millis from arduino - iox
-           edgar.mTrigger(0,melody[timeCalibrationCounter]+20);
+           lastTime = synth.millis(); // cant use millis from arduino - iox
+           synth.mTrigger(0,melody[timeCalibrationCounter]+20);
            //_delay_ms(5);
-           lastTime = edgar.millis();
+           lastTime = synth.millis();
            timeCalibrationCounter++;
            if (timeCalibrationCounter>28) timeCalibrationCounter = 0;
     }
