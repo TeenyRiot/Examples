@@ -24,6 +24,8 @@ void setup()
     synth.setupVoice(1,SQUARE,62,ENVELOPE0,100,64);
     synth.setupVoice(2,NOISE,64,ENVELOPE2,110,64);
     synth.setupVoice(3,SQUARE,67,ENVELOPE0,110,64);
+    synth.bendTimer(255); //drone echo effect - tweak me!
+    //synth.resetTimer(); //set timer to default sample rate
 }
 
 
@@ -35,7 +37,7 @@ void loop()
     if (m-lastTime >= analogRead(A3))  {
            lastTime = synth.millis(); // cant use millis from arduino - iox
            synth.mTrigger(0,melody[timeCalibrationCounter]+20);
-           //_delay_ms(5);
+
            lastTime = synth.millis();
            timeCalibrationCounter++;
            if (timeCalibrationCounter>28) timeCalibrationCounter = 0;
