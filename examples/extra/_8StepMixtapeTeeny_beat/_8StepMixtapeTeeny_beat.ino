@@ -30,11 +30,13 @@ unsigned long lastTime = 0; // variable to store the last time we sent a chord
 
 static inline void soundTrigger(uint8_t a)
 {
+  if(stepFreqs[a] > 0)
+  {
     synth.mTrigger(1,stepFreqs[a]+50);
     if (a%2 == 0)     synth.mTrigger(0,stepFreqs[a]+20);
     if ((a+1)%2 == 0)     synth.mTrigger(2,stepFreqs[a]+20);
-
     //synth.mTrigger(2,stepFreqs[a]+100);
+  }
 }
 
 void setFrequency()
@@ -47,8 +49,8 @@ void setFrequency()
 
             while((analogRead(pot)>POT_THRESHOLD))
                 {
-
-                    int freq = (analogRead(pot)-POT_THRESHOLD) >> 2;
+                    int freq_full = analogRead(pot);  
+                    int freq = (freq_full - POT_THRESHOLD) >> 2;
 
                     for (int i = 0; i <= freq>>5; i++)
                         {
@@ -66,7 +68,9 @@ void setFrequency()
 
                     unsigned long m = synth.millis();
 
+                    if(freq_full<POT_THRESHOLD+20) freq=0;
                     stepFreqs[a] = freq >> 1;
+
 
 
                     if (m-lasm >= 500 )
@@ -144,7 +148,7 @@ void loop()
     unsigned long m = synth.millis();
 
 
-    if (m-lastTime >= analogRead(A3) )
+    if (m-lastTime >= (analogRead(A3) - (POT_THRESHOLD + 5)) )
         {
           int freq = stepFreqs[a%NUMBER_OF_STEPS];
 
